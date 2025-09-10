@@ -22,7 +22,14 @@ for file_path in all_files:
         raise ValueError(f"CSV {file_path} does not have required columns (Text, Tag)")
 
     tokens = df["Text"].fillna("").astype(str).tolist()
-    labels = df["Tag"].fillna("O").astype(str).tolist()
+    valid_prefixes = ("B-", "I-", "O")  # allowed NER tags
+    labels = []
+    for lbl in df["Tag"].fillna("O").astype(str).tolist():
+        if lbl.startswith(valid_prefixes):
+            labels.append(lbl)
+        else:
+            labels.append("O")  # fallback to 'O' if it's not a valid tag
+
 
 
     documents.append({

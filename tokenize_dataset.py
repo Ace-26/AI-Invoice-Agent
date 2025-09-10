@@ -30,6 +30,14 @@ id2tag = {i: tag for tag, i in tag2id.items()}
 
 print("Label mapping:", tag2id)
 
+valid_tags = set(tag2id.keys())
+
+for ex in (train_data + val_data + test_data):
+    for lbl in ex["labels"]:
+        if lbl not in valid_tags:
+            print("⚠ Unexpected label found:", lbl)
+
+
 # Align labels with tokens
 def tokenize_and_align_labels(examples):
     tokenized_inputs = tokenizer(
